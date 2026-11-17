@@ -195,7 +195,7 @@ function show(id){
     cap.append(key('k','안진'),key('d','빠진 안진 (0.15초 미만)')); if(d.shake) cap.appendChild(key('s','머리 흔드는 구간'));
     const why=document.createElement('div'); why.className='why'; why.textContent=ADD[d.test]; const why2=document.createElement('div'); why2.className='why'; why2.textContent=DEL;
     const gb=document.createElement('div'); gb.className='gbox'; const g=document.createElement('div'); g.className='g'; g.tabIndex=0; g.setAttribute('aria-label','지금 방식과 변경안 2가지 그래프. 눌러서 영상 시각 이동');
-    const im=document.createElement('img'); im.src=d.img; im.alt='지금 방식과 변경안 2가지 왼눈 가로 그래프'; const c=document.createElement('div'); c.className='cur'; g.append(im,c); gb.appendChild(g); curEls.push(c);
+    const im=document.createElement('img'); im.src=d.img+'?v=20261117b'; im.alt='지금 방식과 변경안 2가지 왼눈 가로 그래프'; const c=document.createElement('div'); c.className='cur'; g.append(im,c); gb.appendChild(g); curEls.push(c);
     let drag=false; const seek=e=>{const bx=g.getBoundingClientRect(); const f=((e.clientX-bx.left)/bx.width-cur.x0)/(cur.x1-cur.x0); v.currentTime=Math.max(0,Math.min(1,f))*(v.duration||(cur.b-cur.a)); draw()};
     g.addEventListener('pointerdown',e=>{drag=true;g.setPointerCapture(e.pointerId);seek(e)}); g.addEventListener('pointermove',e=>{if(drag)seek(e)}); g.addEventListener('pointerup',()=>drag=false);
     row.append(cap,gb); rows.appendChild(row);}
