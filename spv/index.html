@@ -96,7 +96,7 @@ td.z{color:var(--good);font-weight:600}
  <nav>
   <h1>Peak SPV 보정 비교</h1>
   <div class="tabs" id="tabs" role="group" aria-label="검사 선택"></div>
-  <p>그래프는 위가 지금 방식(Type 1), 아래가 변경안입니다. 그래프 선은 같고 안진 표시(검은 선)와 Peak SPV 계산만 다릅니다. 빨간 선은 변경안에서 빠진 안진(완서상 0.15초 미만)이고, 노란 별은 최댓값을 낸 안진입니다. 영상을 틀면 빨간 선이 같은 시각을 따라가고, 그래프를 누르면 영상이 그 시각으로 갑니다.</p>
+  <p>그래프는 위가 지금 방식(Type 1), 아래가 변경안입니다. 그래프 선은 같고 안진 표시(검은 선)와 Peak SPV 계산만 다릅니다. 빨간 선은 변경안에서 빠진 안진(완서상 0.15초 미만)이고, 노란 별은 Peak SPV를 낸 안진입니다(지금 방식은 최댓값, 변경안은 95백분위 순위의 안진). 영상을 틀면 빨간 선이 같은 시각을 따라가고, 그래프를 누르면 영상이 그 시각으로 갑니다.</p>
   <a class="plink" href="#method" data-id="method">Peak SPV 보정 방법</a>
   <div id="nav"></div>
  </nav>
@@ -132,8 +132,8 @@ td.z{color:var(--good);font-weight:600}
    <ol><li>느린 상이 0.15초보다 짧은 안진은 SPV 계산과 표시에서 뺍니다(트래커 약 72 Hz 기준 11샘플).</li>
    <li>샘플 몇 개로 그은 짧은 느린 상은 끝점 하나만 튀어도 기울기가 크게 나와, 실제로 없는 빠른 안진을 만듭니다.</li>
    <li>근거: 안진의 느린 상은 생리적으로 0.15초보다 깁니다.</li></ol></div>
-   <div><h3>2. Peak SPV = 95백분위, 최댓값은 함께 표시</h3>
-   <ol><li>남은 안진들의 SPV 크기에서 95백분위를 Peak로 씁니다. 최댓값은 괄호로 같이 보여 줍니다.</li>
+   <div><h3>2. Peak SPV = 95백분위</h3>
+   <ol><li>남은 안진들의 SPV 크기에서 95백분위를 Peak로 씁니다.</li>
    <li>단발로 튄 값 하나가 Peak를 정하지 않게 하려는 것입니다. 안진이 몇 개뿐인 구간에서는 95백분위가 최댓값과 거의 같습니다.</li></ol></div>
    <div><h3>결과 요약 (체위 검사, 자세 구간별 Peak의 중앙값)</h3>
    <div class="tbox"><table>
@@ -142,7 +142,7 @@ td.z{color:var(--good);font-weight:600}
     <tr><td>안진 없는 기록 (34구간)</td><td>6.5°/s</td><td>6.4°/s</td></tr>
    </table></div>
    <p>짧은 가짜 박동 때문에 Peak가 높던 곳(S01 Lean 24.1 → 6.2, S05 Dix-Hallpike Rt 32.3 → 9.2)은 크게 내려갑니다. 안진 없는 환자에서 0.15초보다 긴 가짜 안진(S14 Dix-Hallpike Rt 35.0°/s 등)은 그대로 남습니다.</p></div>
-   <p>표시: 검은 선 = 그 방식이 최종으로 잡는 안진. 빨간 선 = 변경안에서 빠진 안진(속도와 길이 표시). 노란 별 = 그 방식에서 SPV 최댓값을 낸 안진. mean SPV는 표시된 안진의 느린 상 속도 크기의 평균입니다. 그래프 제목의 값은 그 구간, 위쪽 요약 줄의 값은 기록 전체입니다.</p>
+   <p>표시: 검은 선 = 그 방식이 최종으로 잡는 안진. 빨간 선 = 변경안에서 빠진 안진(속도와 길이 표시). 노란 별 = 그 방식의 Peak SPV를 낸 안진(지금 방식은 최댓값, 변경안은 95백분위 순위). mean SPV는 표시된 안진의 느린 상 속도 크기의 평균입니다. 그래프 제목의 값은 그 구간, 위쪽 요약 줄의 값은 기록 전체입니다.</p>
   </article>
  </main>
 </div>
@@ -180,7 +180,7 @@ function show(id){
   document.querySelectorAll('details.grp').forEach(g=>g.open=g.dataset.rec===d.rec);
   const its=D.filter(x=>x.rec===d.rec), sum=k=>its.reduce((a,x)=>a+x[k],0), pb=document.getElementById('pbar'); pb.textContent='';
   const pn=document.createElement('span'); pn.className='pn'; pn.textContent=d.name; const ch=document.createElement('span'); ch.className='chip'; ch.textContent=d.kind;
-  const pm=document.createElement('span'); pm.className='pm'; const st=k=>{const r=(its[0].R||{})[['now','pp','p2'][k]];if(!r)return '0개';return r.n+'개 (mean SPV '+r.ms.toFixed(1)+' · peak SPV '+r.pk.toFixed(1)+'°/s'+(k?' (95백분위), 최댓값 '+r.mx.toFixed(1):'')+')'}; pm.textContent=TN[d.test]+' · 기록 전체 Peak SPV: 지금 '+st(0)+' · 변경안 '+st(1)+' · 구간 '+(its.indexOf(d)+1)+' / '+its.length;
+  const pm=document.createElement('span'); pm.className='pm'; const st=k=>{const r=(its[0].R||{})[['now','pp','p2'][k]];if(!r)return '0개';return r.n+'개 (mean SPV '+r.ms.toFixed(1)+' · peak SPV '+r.pk.toFixed(1)+'°/s'+(k?' (95백분위)':'')+')'}; pm.textContent=TN[d.test]+' · 기록 전체 Peak SPV: 지금 '+st(0)+' · 변경안 '+st(1)+' · 구간 '+(its.indexOf(d)+1)+' / '+its.length;
   pb.append(pn,ch,pm);
   document.getElementById('title').textContent=d.L;
   document.getElementById('sub').textContent=(P?'자세 시작부터 ':'검사 시작부터 ')+d.a.toFixed(0)+'–'+d.b.toFixed(0)+'초 · 왼눈 가로(H)'+(!P&&d.shake?' · 머리 흔든 구간 '+d.shake[0]+'–'+d.shake[1]+'초':'');
@@ -192,7 +192,7 @@ function show(id){
     cap.append(key('k','안진'),key('d','빠진 안진 (0.15초 미만)')); if(d.shake) cap.appendChild(key('s','머리 흔드는 구간'));
     const why=document.createElement('div'); why.className='why'; why.textContent=ADD[d.test]; const why2=document.createElement('div'); why2.className='why'; why2.textContent=DEL;
     const gb=document.createElement('div'); gb.className='gbox'; const g=document.createElement('div'); g.className='g'; g.tabIndex=0; g.setAttribute('aria-label','지금 방식과 변경안 그래프. 눌러서 영상 시각 이동');
-    const im=document.createElement('img'); im.src=d.img+'?v=20261117d'; im.alt='지금 방식과 변경안 왼눈 가로 그래프'; const c=document.createElement('div'); c.className='cur'; g.append(im,c); gb.appendChild(g); curEls.push(c);
+    const im=document.createElement('img'); im.src=d.img+'?v=20261117e'; im.alt='지금 방식과 변경안 왼눈 가로 그래프'; const c=document.createElement('div'); c.className='cur'; g.append(im,c); gb.appendChild(g); curEls.push(c);
     let drag=false; const seek=e=>{const bx=g.getBoundingClientRect(); const f=((e.clientX-bx.left)/bx.width-cur.x0)/(cur.x1-cur.x0); v.currentTime=Math.max(0,Math.min(1,f))*(v.duration||(cur.b-cur.a)); draw()};
     g.addEventListener('pointerdown',e=>{drag=true;g.setPointerCapture(e.pointerId);seek(e)}); g.addEventListener('pointermove',e=>{if(drag)seek(e)}); g.addEventListener('pointerup',()=>drag=false);
     row.append(cap,gb); rows.appendChild(row);}
