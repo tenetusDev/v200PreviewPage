@@ -96,7 +96,7 @@ td.z{color:var(--good);font-weight:600}
  <nav>
   <h1>Peak SPV 보정 비교</h1>
   <div class="tabs" id="tabs" role="group" aria-label="검사 선택"></div>
-  <p>그래프는 위에서부터 지금 방식(Type 1), 변경안 ①+③, 변경안 ①+②+③입니다. 그래프 선은 같고 안진 표시(검은 선)와 SPV 계산만 다릅니다. 두 변경안은 같은 안진을 쓰고, ②는 각 안진의 SPV 값만 바꿉니다. 노란 배경은 변경안에서 빠진 안진(완서상 0.15초 미만)입니다. 영상을 틀면 빨간 선이 같은 시각을 따라가고, 그래프를 누르면 영상이 그 시각으로 갑니다.</p>
+  <p>그래프는 위에서부터 지금 방식(Type 1), 변경안 ①+③, 변경안 ①+②+③입니다. 그래프 선은 같고 안진 표시(검은 선)와 SPV 계산만 다릅니다. 두 변경안은 같은 안진을 쓰고, ②는 각 안진의 SPV 값만 바꿉니다. 빨간 선은 변경안에서 빠진 안진(완서상 0.15초 미만)이고, 노란 별은 최댓값을 낸 안진입니다. 영상을 틀면 빨간 선이 같은 시각을 따라가고, 그래프를 누르면 영상이 그 시각으로 갑니다.</p>
   <a class="plink" href="#method" data-id="method">Peak SPV 보정 방법</a>
   <div id="nav"></div>
  </nav>
@@ -145,7 +145,7 @@ td.z{color:var(--good);font-weight:600}
     <tr><td>안진 없는 기록 (34구간)</td><td>6.5°/s</td><td>6.4°/s</td><td>6.5°/s</td></tr>
    </table></div>
    <p>짧은 가짜 박동 때문에 Peak가 높던 곳(S01 Lean 24.1 → 6.2, S05 Dix-Hallpike Rt 32.3 → 9.2)은 크게 내려갑니다. 안진 없는 환자에서 0.15초보다 긴 가짜 안진(S14 Dix-Hallpike Rt 35.0°/s 등)은 그대로 남습니다.</p></div>
-   <p>표시: 검은 선 = 그 방식이 최종으로 잡는 안진. 노란 배경 = 변경안에서 빠진 안진. mean SPV는 표시된 안진의 느린 상 속도 크기의 평균입니다. 그래프 제목의 값은 그 구간, 위쪽 요약 줄의 값은 기록 전체입니다.</p>
+   <p>표시: 검은 선 = 그 방식이 최종으로 잡는 안진. 빨간 선 = 변경안에서 빠진 안진(속도와 길이 표시). 노란 별 = 그 방식에서 SPV 최댓값을 낸 안진. mean SPV는 표시된 안진의 느린 상 속도 크기의 평균입니다. 그래프 제목의 값은 그 구간, 위쪽 요약 줄의 값은 기록 전체입니다.</p>
   </article>
  </main>
 </div>
@@ -192,7 +192,7 @@ function show(id){
   const key=(c,txt)=>{const k=document.createElement('span'); k.className='key'; const i=document.createElement('i'); i.className=c; k.append(i,txt); return k};
   {const row=document.createElement('div'); row.className='row';
     const cap=document.createElement('div'); cap.className='cap';
-    cap.append(key('k','안진'),key('h','변경안에서 빠진 안진 (0.15초 미만)')); if(d.shake) cap.appendChild(key('s','머리 흔드는 구간'));
+    cap.append(key('k','안진'),key('d','빠진 안진 (0.15초 미만)')); if(d.shake) cap.appendChild(key('s','머리 흔드는 구간'));
     const why=document.createElement('div'); why.className='why'; why.textContent=ADD[d.test]; const why2=document.createElement('div'); why2.className='why'; why2.textContent=DEL;
     const gb=document.createElement('div'); gb.className='gbox'; const g=document.createElement('div'); g.className='g'; g.tabIndex=0; g.setAttribute('aria-label','지금 방식과 변경안 2가지 그래프. 눌러서 영상 시각 이동');
     const im=document.createElement('img'); im.src=d.img; im.alt='지금 방식과 변경안 2가지 왼눈 가로 그래프'; const c=document.createElement('div'); c.className='cur'; g.append(im,c); gb.appendChild(g); curEls.push(c);
